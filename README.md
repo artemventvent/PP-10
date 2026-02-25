@@ -28,7 +28,7 @@
 
 ```bash
 # Клонировать репозиторий
-git clone <url>
+git clone https://github.com/artemventvent/PP-10.git
 cd Src
 
 # Установить зависимости
