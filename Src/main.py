@@ -18,7 +18,7 @@ def get_db():
     finally:
         db.close()
 
-# ===== Dashboard =====
+# dashboard
 @app.get("/")
 def dashboard(request: Request, db: Session = Depends(get_db)):
     servers_count = db.query(Server).count()
@@ -31,7 +31,7 @@ def dashboard(request: Request, db: Session = Depends(get_db)):
         "events_count": events_count
     })
 
-# ===== Servers Page =====
+# servers
 @app.get("/servers")
 def servers_list(request: Request, db: Session = Depends(get_db)):
     servers = db.query(Server).all()
@@ -70,7 +70,7 @@ def server_delete(server_id: int, db: Session = Depends(get_db), request: Reques
     servers = db.query(Server).all()
     return templates.TemplateResponse("servers.html", {"request": request, "servers": servers})
 
-# ===== Policies =====
+# policies
 @app.get("/policies")
 def policies_list(request: Request, db: Session = Depends(get_db)):
     policies = db.query(SecurityPolicy).all()
@@ -107,7 +107,7 @@ def policy_delete(request: Request, policy_id: int, db: Session = Depends(get_db
     db.commit()
     return templates.TemplateResponse("policies.html", {"request": request, "policies": db.query(SecurityPolicy).all()})
 
-# ===== Events =====
+# events
 @app.get("/events")
 def events_list(request: Request, db: Session = Depends(get_db)):
     events = db.query(SecurityEvent).all()
