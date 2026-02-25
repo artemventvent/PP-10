@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Форма события{% endblock %}
+{% block page_title %}{% if action=='create' %}Создать событие{% else %}Редактировать событие{% endif %}{% endblock %}
+{% set active_page='events' %}
+{% block content %}
+<div class="card card-accent card-gradient">
+    <div class="card-body">
+        <h5 class="card-title mb-3" style="color:#ffffff !important;"><i class="bi bi-exclamation-triangle me-2"></i>{% if action=='create' %}Создать событие{% else %}Редактировать событие{% endif %}</h5>
+        <form method="post" action="{{ '/events/create' if action=='create' else ('/events/edit/' ~ event.id) }}">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Сервер</label>
+                    <select name="server_id" class="form-select bg-secondary text-light border-light" required>
+                        <option value="">— выберите —</option>
+                        {% for srv in servers %}
+                        <option value="{{ srv.id }}" {% if event and event.server_id==srv.id %}selected{% endif %}>{{ srv.name }} ({{ srv.ip_address }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Политика безопасности</label>
+                    <select name="policy_id" class="form-select bg-secondary text-light border-light" required>
+                        <option value="">— выберите —</option>
+                        {% for p in policies %}
+                        <option value="{{ p.id }}" {% if event and event.policy_id==p.id %}selected{% endif %}>{{ p.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Тип события</label>
+                    <input type="text" name="event_type" class="form-control bg-secondary text-light border-light" value="{{ event.event_type if event else '' }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Уровень серьезности</label>
+                    <select name="severity" class="form-select bg-secondary text-light border-light">
+                        <option value="low" {% if event and event.severity=='low' %}selected{% endif %}>Низкий</option>
+                        <option value="medium" {% if event and event.severity=='medium' %}selected{% endif %}>Средний</option>
+                        <option value="high" {% if event and event.severity=='high' %}selected{% endif %}>Высокий</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Описание</label>
+                    <textarea name="description" class="form-control bg-secondary text-light border-light">{{ event.description if event else '' }}</textarea>
+                </div>
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-light me-2">{% if action=='create' %}Создать{% else %}Сохранить{% endif %}</button>
+                <a href="/events" class="btn btn-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

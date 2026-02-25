@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Форма сервера{% endblock %}
+{% block page_title %}{% if action=='create' %}Создать сервер{% else %}Редактировать сервер{% endif %}{% endblock %}
+{% set active_page='servers' %}
+{% block content %}
+<div class="card card-accent card-gradient">
+    <div class="card-body">
+        <h5 class="card-title mb-3" style="color:#ffffff !important;"><i class="bi bi-hdd-network me-2"></i>{% if action=='create' %}Создать сервер{% else %}Редактировать сервер{% endif %}</h5>
+        <form method="post">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Имя сервера</label>
+                    <input type="text" name="name" class="form-control bg-secondary text-light border-light" value="{{ server.name if server else '' }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">IP адрес</label>
+                    <input type="text" name="ip_address" class="form-control bg-secondary text-light border-light" value="{{ server.ip_address if server else '' }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Статус</label>
+                    <select name="status" class="form-select bg-secondary text-light border-light">
+                        <option value="online" {% if server and server.status=='online' %}selected{% endif %}>Онлайн</option>
+                        <option value="warning" {% if server and server.status=='warning' %}selected{% endif %}>Предупреждение</option>
+                        <option value="offline" {% if server and server.status=='offline' %}selected{% endif %}>Оффлайн</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-light me-2">{% if action=='create' %}Создать{% else %}Сохранить{% endif %}</button>
+                <a href="/servers" class="btn btn-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% set active_page='dashboard' %}
+{% block content %}
+<div class="row g-4 mb-4">
+    <!-- Карточки -->
+    <div class="col-md-4">
+        <div class="card card-hover card-accent card-gradient text-white bg-primary">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="flex-grow-1">
+                    <h6 class="card-title mb-1">Сервера</h6>
+                    <div class="d-flex align-items-end">
+                        <h2 class="mb-0 me-3">{{ servers_count }}</h2>
+                        <small class="text-muted-white">всего</small>
+                    </div>
+                    <a href="/servers" class="btn btn-light btn-sm mt-3">Перейти</a>
+                </div>
+                <div class="display-6 text-opacity-75">
+                    <i class="bi bi-hdd-network" style="font-size:2.4rem;opacity:0.9"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-hover card-accent card-gradient text-dark bg-success">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="flex-grow-1">
+                    <h6 class="card-title mb-1">Политики</h6>
+                    <div class="d-flex align-items-end">
+                        <h2 class="mb-0 me-3">{{ policies_count }}</h2>
+                        <small style="color: #000 !important;">всего</small>
+                    </div>
+                    <a href="/policies" class="btn btn-dark btn-sm mt-3">Перейти</a>
+                </div>
+                <div class="display-6 text-opacity-75">
+                    <i class="bi bi-shield-lock" style="font-size:2.4rem;opacity:0.9"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-hover card-accent card-gradient text-white bg-danger">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="flex-grow-1">
+                    <h6 class="card-title mb-1">События</h6>
+                    <div class="d-flex align-items-end">
+                        <h2 class="mb-0 me-3">{{ events_count }}</h2>
+                        <small class="text-muted-white">всего</small>
+                    </div>
+                    <a href="/events" class="btn btn-light btn-sm mt-3">Перейти</a>
+                </div>
+                <div class="display-6 text-opacity-75">
+                    <i class="bi bi-exclamation-triangle" style="font-size:2.4rem;opacity:0.9"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- График -->
+<div class="card bg-dark text-light p-3 card-accent">
+    <h5 class="mb-3">Статистика элементов</h5>
+    <canvas id="dashboardChart" height="180"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('dashboardChart').getContext('2d');
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Сервера', 'Политики', 'События'],
+        datasets: [{
+            label: 'Количество',
+            data: [{{ servers_count }}, {{ policies_count }}, {{ events_count }}],
+            backgroundColor: ['#0d6efd','#28c76f','#dc3545']
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+        scales: {
+            x: { grid: { color: '#333' }, ticks: { color: '#ddd' } },
+            y: { grid: { color: '#333' }, ticks: { color: '#ddd' }, beginAtZero: true }
+        }
+    }
+});
+</script>
+{% endblock %}
